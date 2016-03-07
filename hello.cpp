@@ -4,6 +4,16 @@
 #include <iostream>
 #include <boost/program_options.hpp>
 
+/* Hello world using HPX on multiple localities.
+ * Based on the Futurization example [1]
+ * and instructions on how to run HPX with pkg-config [2]
+ *
+ * [1] http://stellar-group.github.io/hpx/docs/html/hpx/tutorial/futurization_example.html
+ * [2] http://stellar-group.github.io/hpx/docs/html/hpx/manual/build_system/using_hpx/pkgconfig.html
+ */
+
+/* Server-side class */
+
 struct hello_component : hpx::components::component_base<hello_component> {
 
     hello_component() {}
@@ -14,9 +24,13 @@ struct hello_component : hpx::components::component_base<hello_component> {
     HPX_DEFINE_COMPONENT_DIRECT_ACTION(hello_component, hello_function, hello_action);
 };
 
+/* Boilerplate */
+
 typedef hpx::components::component<hello_component> hello_component_type;
 HPX_REGISTER_COMPONENT(hello_component_type, hello_component);
 HPX_REGISTER_ACTION(hello_component::hello_action);
+
+/* Client-side class */
 
 struct hello_component_client : hpx::components::client_base<hello_component_client, hello_component> {
 
