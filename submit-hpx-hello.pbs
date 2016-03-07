@@ -1,0 +1,19 @@
+#!/bin/bash
+#PBS -N hpx-example
+#PBS -l select=2:ncpus=1:mpiprocs=1:interconnect=56g,walltime=00:30:00
+
+APP_PATH=$PBS_O_WORKDIR/out
+APP_OPTIONS=
+
+module add gcc/4.8.1 hwloc/1.10.1 openmpi/1.8.1
+
+export LD_LIBRARY_PATH=~/local/hpx/lib:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=~/local/boost/lib:$LD_LIBRARY_PATH
+export LIBRARY_PATH=~/local/hpx/lib:$LD_LIBRARY_PATH
+export LIBRARY_PATH=~/local/boost/lib:$LD_LIBRARY_PATH
+export CPLUS_INCLUDE_PATH=~/local/hpx/include/:$CPLUS_INCLUDE_PATH
+export CPLUS_INCLUDE_PATH=~/local/boost/include/$:$CPLUS_INCLUDE_PATH
+export CPLUS_INCLUDE_PATH=/software/hwloc/1.10.1/include/:$CPLUS_INCLUDE_PATH
+export PKG_CONFIG_PATH=~/local/hpx/lib/pkgconfig:$PKG_CONFIG_PATH
+
+mpiexec --mca pml ob1 $APP_PATH $APP_OPTIONS --hpx:ignore-batch-env --hpx:threads=2 --hpx:nodes=`cat $PBS_NODEFILE`
